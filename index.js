@@ -46,7 +46,7 @@ app.post("/add-user", async (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.send("This is the response");
+  res.send("This is the backend response");
 });
 
 mongoose
