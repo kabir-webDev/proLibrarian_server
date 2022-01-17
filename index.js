@@ -45,6 +45,17 @@ app.post("/add-user", async (req, res) => {
   }
 });
 
+app.get("/all-user", async (req, res) => {
+  try {
+    const response = await userModel.find({});
+    res.status(201).json(response);
+    console.log("Response: ", response);
+  } catch (error) {
+    res.cookie();
+    res.json({ status: error.message });
+  }
+});
+
 app.get("/", (req, res) => {
   res.send("This is the ultimate backend response");
 });
