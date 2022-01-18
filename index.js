@@ -4,6 +4,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 // import bcrypt from "bcrypt";
 import userModel from "./model/new_user.js";
+import bookModel from "./model/new_book.js";
 
 const app = express();
 app.use(cors());
@@ -38,9 +39,21 @@ app.post("/add-user", async (req, res) => {
   const newUser = new userModel(user);
   try {
     await newUser.save();
-    res.status(201).json(newUser).cookie();
+    res.status(201).json(newUser);
   } catch (error) {
     res.cookie();
+    res.json({ status: error.message });
+  }
+});
+
+app.post("/add-book", async (req, res) => {
+  const book = req.body;
+  console.log(book);
+  const newBook = new bookModel(book);
+  try {
+    await newBook.save();
+    res.status(201).json(newBook);
+  } catch (error) {
     res.json({ status: error.message });
   }
 });
@@ -48,6 +61,17 @@ app.post("/add-user", async (req, res) => {
 app.get("/all-user", async (req, res) => {
   try {
     const response = await userModel.find({});
+    res.status(201).json(response);
+    console.log("Response: ", response);
+  } catch (error) {
+    res.cookie();
+    res.json({ status: error.message });
+  }
+});
+
+app.get("/all-book", async (req, res) => {
+  try {
+    const response = await bookModel.find({});
     res.status(201).json(response);
     console.log("Response: ", response);
   } catch (error) {
