@@ -46,6 +46,10 @@ app.post("/add-user", async (req, res) => {
   }
 });
 
+// app.post("/delete-user",(req,res)=>{
+//   const
+// })
+
 app.post("/add-book", async (req, res) => {
   const book = req.body;
   console.log(book);
@@ -53,6 +57,16 @@ app.post("/add-book", async (req, res) => {
   try {
     await newBook.save();
     res.status(201).json(newBook);
+  } catch (error) {
+    res.json({ status: error.message });
+  }
+});
+
+app.get("/single-user/:id", async (req, res) => {
+  try {
+    const response = await userModel.findById(req.params.id);
+    res.status(201).json(response);
+    console.log("Response: ", response);
   } catch (error) {
     res.json({ status: error.message });
   }
