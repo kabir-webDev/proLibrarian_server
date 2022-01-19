@@ -35,7 +35,6 @@ const PORT = 5000;
 
 app.post("/add-user", async (req, res) => {
   const user = req.body;
-  console.log(user);
   const newUser = new userModel(user);
   try {
     await newUser.save();
@@ -46,13 +45,41 @@ app.post("/add-user", async (req, res) => {
   }
 });
 
-// app.post("/delete-user",(req,res)=>{
-//   const
-// })
+app.put("/edit-user/:id", async (req, res) => {
+  console.log(req.params);
+  let user = await userModel.findById(req.params.id);
+  user = req.body;
+  console.log(user);
+  const editUser = new userModel(user);
+  try {
+    await userModel.updateOne({ _id: req.params.id }, editUser);
+    res.status(201).json(editUser);
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+
+  // const user = req.body;
+  // console.log(user);
+  // try {
+  //   const newUser = new userModel.findByIdAndUpdate(user._id, user);
+  //   res.status(201).json(newUser);
+  // } catch (error) {
+  //   res.cookie();
+  //   res.json({ status: error.message });
+  // }
+});
+
+app.delete("/delete-user/:id", async (req, res) => {
+  try {
+    await userModel.deleteOne({ _id: req.params.id });
+    res.status(201).json("User deleted Successfully");
+  } catch (error) {
+    res.status(409).json({ message: error.message });
+  }
+});
 
 app.post("/add-book", async (req, res) => {
   const book = req.body;
-  console.log(book);
   const newBook = new bookModel(book);
   try {
     await newBook.save();
@@ -66,7 +93,6 @@ app.get("/single-user/:id", async (req, res) => {
   try {
     const response = await userModel.findById(req.params.id);
     res.status(201).json(response);
-    console.log("Response: ", response);
   } catch (error) {
     res.json({ status: error.message });
   }
@@ -76,7 +102,6 @@ app.get("/all-user", async (req, res) => {
   try {
     const response = await userModel.find({});
     res.status(201).json(response);
-    console.log("Response: ", response);
   } catch (error) {
     res.cookie();
     res.json({ status: error.message });
@@ -87,7 +112,6 @@ app.get("/all-book", async (req, res) => {
   try {
     const response = await bookModel.find({});
     res.status(201).json(response);
-    console.log("Response: ", response);
   } catch (error) {
     res.cookie();
     res.json({ status: error.message });
