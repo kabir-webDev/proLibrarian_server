@@ -54,22 +54,32 @@ app.post("/edit-user/:id", async (req, res) => {
   } catch (error) {
     res.json({ message: error.message });
   }
+});
 
-  // const user = req.body;
-  // console.log(user);
-  // try {
-  //   const newUser = new userModel.findByIdAndUpdate(user._id, user);
-  //   res.status(201).json(newUser);
-  // } catch (error) {
-  //   res.cookie();
-  //   res.json({ status: error.message });
-  // }
+app.post("/edit-book/:id", async (req, res) => {
+  let updatedBook = req.body;
+  const editBook = new bookModel(updatedBook);
+  try {
+    await bookModel.findByIdAndUpdate({ _id: req.params.id }, editBook);
+    res.status(201).json(editBook);
+  } catch (error) {
+    res.json({ message: error.message });
+  }
 });
 
 app.delete("/delete-user/:id", async (req, res) => {
   try {
     await userModel.deleteOne({ _id: req.params.id });
     res.status(201).json("User deleted Successfully");
+  } catch (error) {
+    res.status(409).json({ message: error.message });
+  }
+});
+
+app.delete("/delete-book/:id", async (req, res) => {
+  try {
+    await bookModel.deleteOne({ _id: req.params.id });
+    res.status(201).json("Book deleted Successfully");
   } catch (error) {
     res.status(409).json({ message: error.message });
   }
@@ -89,6 +99,15 @@ app.post("/add-book", async (req, res) => {
 app.get("/single-user/:id", async (req, res) => {
   try {
     const response = await userModel.findById(req.params.id);
+    res.status(201).json(response);
+  } catch (error) {
+    res.json({ status: error.message });
+  }
+});
+
+app.get("/single-book/:id", async (req, res) => {
+  try {
+    const response = await bookModel.findById(req.params.id);
     res.status(201).json(response);
   } catch (error) {
     res.json({ status: error.message });
