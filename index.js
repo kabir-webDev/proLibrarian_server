@@ -45,14 +45,11 @@ app.post("/add-user", async (req, res) => {
   }
 });
 
-app.put("/edit-user/:id", async (req, res) => {
-  console.log(req.params);
-  let user = await userModel.findById(req.params.id);
-  user = req.body;
-  console.log(user);
-  const editUser = new userModel(user);
+app.post("/edit-user/:id", async (req, res) => {
+  let updatedUser = req.body;
+  const editUser = new userModel(updatedUser);
   try {
-    await userModel.updateOne({ _id: req.params.id }, editUser);
+    await userModel.findByIdAndUpdate({ _id: req.params.id }, editUser);
     res.status(201).json(editUser);
   } catch (error) {
     res.json({ message: error.message });
